@@ -1,9 +1,9 @@
 package tasks.adts
 
-import org.junit.Assert.{assertEquals, assertFalse}
+import org.junit.Assert.{assertEquals, assertFalse, assertTrue}
 import org.junit.Test
 import tasks.adts.SchoolModel.*
-import u03.extensionmethods.Sequences.*
+import u03.extensionmethods.Sequences.{Sequence, *}
 
 
 class SchoolModelTest:
@@ -24,8 +24,8 @@ class SchoolModelTest:
     
   @Test def testSetTeacherToCourse(): Unit =
     val school2 = emptySchool.setTeacherToCourse(teacher("John"), course("Math"))
-    println(school2.teachers) // Cons("John", Nil())
-    println(school2.courses) // Cons("Math", Nil())
-    println(school2.hasTeacher("John")) // true
-    println(school2.hasCourse("Math")) // true
-    println(school2.hasCourse("Italian")) // false
+    assertEquals(Sequence.Cons("John", Sequence.Nil()),school2.teachers)
+    assertEquals(Sequence.Cons("Math", Sequence.Nil()),school2.courses)
+    assertTrue(school2.hasTeacher("John"))
+    assertTrue(school2.hasCourse("Math"))
+    assertFalse(school2.hasCourse("Italian"))

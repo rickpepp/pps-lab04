@@ -1,5 +1,7 @@
 package u03.extensionmethods
 
+import scala.annotation.tailrec
+
 object Sequences:
   
   enum Sequence[E]:
@@ -33,10 +35,14 @@ object Sequences:
       def concat(other: Sequence[A]): Sequence[A] = l match
         case Cons(h, t) => Cons(h, t.concat(other))
         case Nil()      => other
-
-
+    
     def of[A](n: Int, a: A): Sequence[A] =
       if (n == 0) then Nil[A]() else Cons(a, of(n - 1, a))
+
+    @tailrec
+    def contains[A](l: Sequence[A])(elem: A): Boolean = l match
+      case Cons(h, t) => h == elem || contains(t)(elem)
+      case Nil() => false
 
 @main def trySequences() =
   import Sequences.*

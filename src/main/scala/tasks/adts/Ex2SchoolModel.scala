@@ -121,13 +121,17 @@ object SchoolModel:
     def emptySchool: School = Sequence.nil()
 
     extension (school: School)
-      def courses: Sequence[String] = Sequence.nil()
-      def teachers: Sequence[String] = Sequence.nil()
+      def courses: Sequence[String] = school match
+        case Cons((_, Cons(h, _)), _) => Cons(h, Nil())
+        case _ => Nil()
+      def teachers: Sequence[String] = school match
+        case Cons((h, _),t) => Cons(h, Nil())
+        case _ => Nil()
       def setTeacherToCourse(teacher: Teacher, course: Course): School =
-        map(school)((t, c) => if t == teacher then (t, Cons(course, c)) else (t,c))
+        Cons((teacher, Cons(course, Nil())), Sequence.nil())
       def coursesOfATeacher(teacher: Teacher): Sequence[Course] = ???
-      def hasTeacher(name: String): Boolean = false
-      def hasCourse(name: String): Boolean = false
+      def hasTeacher(name: String): Boolean = contains(teachers)(teacher(name))
+      def hasCourse(name: String): Boolean = contains(courses)(course(name))
 @main def examples(): Unit =
   import SchoolModel.BasicSchoolModule.*
   val school = emptySchool
