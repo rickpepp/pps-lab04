@@ -43,6 +43,7 @@ class SchoolModelTest:
     val school = emptySchool.setTeacherToCourse(john, math)
       .setTeacherToCourse(mark, math)
     assertEquals(Sequence.Cons("Math", Sequence.Nil()), school.courses)
+    assertEquals(Sequence.Cons("Mark", Sequence.Cons("John", Sequence.Nil())), school.teachers)
 
   @Test def testDuplicateTeachersValues(): Unit =
     val school = emptySchool.setTeacherToCourse(john, math)
