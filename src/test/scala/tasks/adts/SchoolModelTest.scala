@@ -7,14 +7,18 @@ import u03.extensionmethods.Sequences.{Sequence, *}
 
 
 class SchoolModelTest:
-  val schoolModel: SchoolModule = BasicSchoolModule
   import schoolModel.*
+  val schoolModel: SchoolModule = BasicSchoolModule
+  val john: Teacher = teacher("John")
+  val mark: Teacher = teacher("Mark")
+  val math: Course = course("Math")
+  val italian: Course = course("Italian")
 
   @Test def testTeacher(): Unit =
-    assertEquals("John", teacher("John"))
+    assertEquals("John", john)
 
   @Test def testCourse(): Unit =
-    assertEquals("Math", course("Math"))
+    assertEquals("Math", math)
 
   @Test def testEmptySchool(): Unit =
     assertEquals(Sequence.nil(), emptySchool.courses)
@@ -23,9 +27,24 @@ class SchoolModelTest:
     assertFalse(emptySchool.hasCourse("Math"))
     
   @Test def testSetTeacherToCourse(): Unit =
-    val school2 = emptySchool.setTeacherToCourse(teacher("John"), course("Math"))
-    assertEquals(Sequence.Cons("John", Sequence.Nil()),school2.teachers)
-    assertEquals(Sequence.Cons("Math", Sequence.Nil()),school2.courses)
-    assertTrue(school2.hasTeacher("John"))
-    assertTrue(school2.hasCourse("Math"))
-    assertFalse(school2.hasCourse("Italian"))
+    val school = emptySchool.setTeacherToCourse(john, math)
+    assertEquals(Sequence.Cons("John", Sequence.Nil()),school.teachers)
+    assertEquals(Sequence.Cons("Math", Sequence.Nil()),school.courses)
+    assertTrue(school.hasTeacher("John"))
+    assertTrue(school.hasCourse("Math"))
+    assertFalse(school.hasCourse("Italian"))
+
+  @Test def testCoursesOfTeachersValues(): Unit =
+    val school = emptySchool.setTeacherToCourse(john, math)
+      .setTeacherToCourse(john, italian)
+    assertEquals(Sequence.Cons("Italian", Sequence.Cons("Math", Sequence.Nil())), school.coursesOfATeacher(john))
+
+  @Test def testDuplicateCoursesValues(): Unit =
+    val school = emptySchool.setTeacherToCourse(john, math)
+      .setTeacherToCourse(mark, math)
+    assertEquals(Sequence.Cons("Math", Sequence.Nil()), school.courses)
+
+  @Test def testDuplicateTeachersValues(): Unit =
+    val school = emptySchool.setTeacherToCourse(john, math)
+      .setTeacherToCourse(john, italian)
+    assertEquals(Sequence.Cons("John", Sequence.Nil()), school.teachers)

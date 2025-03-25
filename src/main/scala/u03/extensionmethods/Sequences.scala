@@ -35,7 +35,7 @@ object Sequences:
       def concat(other: Sequence[A]): Sequence[A] = l match
         case Cons(h, t) => Cons(h, t.concat(other))
         case Nil()      => other
-    
+
     def of[A](n: Int, a: A): Sequence[A] =
       if (n == 0) then Nil[A]() else Cons(a, of(n - 1, a))
 
@@ -43,6 +43,10 @@ object Sequences:
     def contains[A](l: Sequence[A])(elem: A): Boolean = l match
       case Cons(h, t) => h == elem || contains(t)(elem)
       case Nil() => false
+
+    def distinct[A](l: Sequence[A]): Sequence[A] = l match
+      case Cons(h, t) => if contains(t)(h) then distinct(t) else Cons(h,distinct(t))
+      case _ => Nil()
 
 @main def trySequences() =
   import Sequences.*
