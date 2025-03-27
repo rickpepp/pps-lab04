@@ -1,6 +1,7 @@
 package u04lab
 import u03.Sequences.* 
 import Sequence.*
+import u03.Optionals.*
 
 /*  Exercise 5: 
  *  - Generalise by ad-hoc polymorphism logAll, such that:
@@ -17,10 +18,31 @@ import Sequence.*
 
 object Ex5Traversable:
 
+  trait Traversable[T[_]]:
+    def traversate[A](t: T[A])(f: A => Unit): Unit
+
+  given Traversable[Optional] with
+    def traversate[A](t: Optional[A])(f: A => Unit): Unit = t match
+      case Optional.Just(t) => f(t)
+      case Optional.Empty() => ()
+
+  given Traversable[Sequence] with
+    def traversate[A](t: Sequence[A])(f: A => Unit): Unit = t match
+      case Sequence.Cons(h, tail) => f(h); traversate(tail)(f)
+      case Sequence.Nil() => ()
+
   def log[A](a: A): Unit = println("The next element is: "+a)
 
-  def logAll[A](seq: Sequence[A]): Unit = seq match
-    case Cons(h, t) => log(h); logAll(t)
-    case _ => ()
+  def logAll[T[_]: Traversable, A](t: T[A])(f: A => Unit): Unit =
+    val traversable = summon[Traversable[T]]
+    traversable.traversate(t)(f(_))
 
-  
+  @main def main =
+    val valore = Sequence.Cons(10, Sequence.Cons(20, Sequence.Nil()))
+    logAll(valore)(log)
+    val valore1 = Optional.Just(5)
+    logAll(valore1)(log)
+    logAll(Optional.Empty())
+    logAll(valore)(println)
+    logAll(valore1)(println)
+    logAll(Optional.Empty())(println)
