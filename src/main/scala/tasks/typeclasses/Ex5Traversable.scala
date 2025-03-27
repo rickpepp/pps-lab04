@@ -38,11 +38,11 @@ object Ex5Traversable:
     traversable.traversate(t)(f(_))
 
   @main def main =
-    val valore = Sequence.Cons(10, Sequence.Cons(20, Sequence.Nil()))
-    logAll(valore)(log)
-    val valore1 = Optional.Just(5)
-    logAll(valore1)(log)
+    val sequence = Sequence.Cons(10, Sequence.Cons(20, Sequence.Nil()))
+    val optionalNotEmpty = Optional.Just(5)
+    logAll(sequence)(log)
+    logAll(optionalNotEmpty)(log)
     logAll(Optional.Empty())
-    logAll(valore)(println)
-    logAll(valore1)(println)
+    logAll(sequence)(println)
+    logAll(optionalNotEmpty)(println)
     logAll(Optional.Empty())(println)
