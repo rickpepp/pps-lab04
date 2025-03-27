@@ -28,7 +28,6 @@ object Ex4Summables:
     def sum(a1: Int, a2: Int): Int = a1 + a2
     def zero: Int = 0
   
-  // write givens for Summable[Double] and Summable[String]
   given Summable[Double] with
     def sum(a1: Double, a2: Double): Double = a1 + a2
     def zero: Double = 0.0
